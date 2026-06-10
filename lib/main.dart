@@ -39,6 +39,7 @@ class PediatricGrowthApp extends StatelessWidget {
           useMaterial3: true,
           colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF00696F)),
           visualDensity: VisualDensity.adaptivePlatformDensity,
+          fontFamily: 'NotoSansJP',
         ),
         home: const HomeScreen(),
       ),

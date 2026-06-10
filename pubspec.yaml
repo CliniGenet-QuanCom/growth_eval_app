@@ -1,7 +1,7 @@
 name: pediatric_growth
 description: 小児体格指数計算アプリ（医療従事者向け・オフライン）
 publish_to: "none"
-version: 1.0.0+2
+version: 1.0.0+3
 
 environment:
   sdk: ">=3.0.0 <4.0.0"
@@ -25,3 +25,10 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+
+  # 日本語字形を全プラットフォームで保証する（Web では未同梱だと
+  # 中国語向けフォールバックフォントが使われ簡体字風の字形になる）
+  fonts:
+    - family: NotoSansJP
+      fonts:
+        - asset: assets/fonts/NotoSansJP.ttf
