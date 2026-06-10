@@ -1,0 +1,69 @@
+# GitHub Pages への Flutter Web (PWA) 自動デプロイ
+#
+# - main ブランチへの push で起動（手動実行も可）
+# - flutter build web が service worker / manifest.json を生成するため
+#   そのまま PWA としてインストール可能
+# - GitHub Pages はリポジトリ名のサブパス (https://<user>.github.io/<repo>/)
+#   で配信されるため、--base-href にリポジトリ名を動的に渡す
+#   （web/index.html の $FLUTTER_BASE_HREF プレースホルダが置換される）
+#
+# 初回のみ: リポジトリの Settings > Pages > Source を
+# 「GitHub Actions」に設定してください。
+
+name: Deploy PWA to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# 同時デプロイを防ぐ（進行中のものは完了させる）
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Analyze
+        run: flutter analyze
+
+      - name: Run tests
+        run: flutter test
+
+      - name: Build web (PWA)
+        run: flutter build web --release --base-href "/${{ github.event.repository.name }}/"
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: build/web
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

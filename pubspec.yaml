@@ -1,0 +1,27 @@
+name: pediatric_growth
+description: 小児体格指数計算アプリ（医療従事者向け・オフライン）
+publish_to: "none"
+version: 1.0.0+2
+
+environment:
+  sdk: ">=3.0.0 <4.0.0"
+  flutter: ">=3.10.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+  hive: ^2.2.3
+  hive_flutter: ^1.1.0
+  fl_chart: ^0.69.0
+  intl: ^0.20.2
+  provider: ^6.1.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+
+flutter:
+  uses-material-design: true
